@@ -1,18 +1,22 @@
+
 .cardContainer {
-	display: flex;
-	flex: 1;
-	flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 12px;
 }
 
+/* Responsive iframe "card" that scales with viewport but keeps a square shape */
 iframe.card {
-	border-radius: 15px;
-	border-width: 2;
-	border-color: black;
-	border-style: solid;
-	width: 200px;
-	height: 200px;
-  	display: flex;
-  	justify-content: center;
-  	align-items: center;
-  	margin: 20px;
+    border-radius: 15px;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+    /* Width scales between 180px and 420px, following viewport */
+    width: clamp(180px, 40vmin, 420px);
+    height: auto;         /* allow height to follow width */
+    aspect-ratio: 1 / 1;  /* keep it square */
+    display: block;
 }

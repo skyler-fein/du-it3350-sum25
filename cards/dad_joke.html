@@ -1,55 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dad Joke Card</title>
     <style>
+        :root {
+            /* Fluid type scale: adjusts with viewport, stays readable */
+            --title-size: clamp(1rem, 2.2vmin + 0.6rem, 1.4rem);
+            --text-size: clamp(0.85rem, 1.8vmin + 0.4rem, 1.1rem);
+            --pad: clamp(8px, 3vmin, 16px);
+            --radius: 12px;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* Make the card fill the iframe, which itself stays square */
         .joke-card {
-            width: 185px;
-            height: 185px;
-            border-radius: 4px;
-            padding: 4px;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius);
+            padding: var(--pad);
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background-color: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow: hidden;
         }
-		.joke-title {
-			font-size: 1.1em;
-			text-align: center;
-			font-weight: bold;
-			margin-bottom: 2px;
-		}
-        .joke-setup {
-            margin-bottom: 4px;
+
+        .joke-title {
+            font-size: var(--title-size);
+            text-align: center;
+            font-weight: bold;
+            margin: 0 0 4px 0;
         }
+
+        .joke-setup,
+        .joke-punchline {
+            font-size: var(--text-size);
+            line-height: 1.3;
+            margin: 0;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+        }
+
         .joke-punchline {
             font-style: italic;
+            opacity: 0.95;
+        }
+
+        /* Slight spacing between body sections */
+        .spacer {
+            height: 8px;
+            flex: 0 0 auto;
         }
     </style>
 </head>
 <body>
     <div class="joke-card" id="jokeCard">
-		<div class="joke-title">Dad Joke Generator </div>
-        <div class="joke-setup" id="setup">Loading joke...</div>
-        <div class="joke-punchline" id="punchline"></div>
+        <div class="joke-title">Dad Joke Generator</div>
+        <p class="joke-setup" id="setup">Loading joke...</p>
+        <div class="spacer"></div>
+        <p class="joke-punchline" id="punchline"></p>
     </div>
-	<script>
-    	window.addEventListener("DOMContentLoaded", async () => {
-        	try {
-            	const response = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://jokefather.com/api/jokes/random"));
-	            const result = await response.json();
-    	        const data = JSON.parse(result.contents); // parse inner JSON
-        	    document.getElementById("setup").textContent = data.setup;
-            	document.getElementById("punchline").textContent = data.punchline;
-	        } catch (error) {
-    	        document.getElementById("setup").textContent = "Oops! Could not load a joke.";
-        	    document.getElementById("punchline").textContent = "";
-            	console.error("Error fetching joke:", error);
-	        }
-    	});
-	</script>
+    <script>
+        window.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch(
+                    "https://api.allorigins.win/get?url=" + encodeURIComponent("https://jokefather.com/api/jokes/random")
+                );
+                const result = await response.json();
+                const data = JSON.parse(result.contents);
+                document.getElementById("setup").textContent = data.setup;
+                document.getElementById("punchline").textContent = data.punchline;
+            } catch (error) {
+                document.getElementById("setup").textContent = "Oops! Could not load a joke.";
+                document.getElementById("punchline").textContent = "";
+                console.error("Error fetching joke:", error);
+            }
+        });
+    </script>
 </body>
 </html>
